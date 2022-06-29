@@ -1,0 +1,39 @@
+name: trivy
+
+on:
+  workflow_dispatch:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '20 9 * * *'
+
+concurrency: trivy
+
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+
+      - name: Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: "ghcr.io/yggdrion/devcontainer:latest"
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+
+  notification:
+    needs: trivy
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord notification
+        if: ${{ needs.trivy.result == 'failure' }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
+        with:
+          args: "{{ EVENT_PAYLOAD.repository.full_name }} - trivy error"

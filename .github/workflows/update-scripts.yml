@@ -1,0 +1,66 @@
+name: update-scripts
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "10 2 * * 1-5"
+
+env:
+  # Maybe read list from .devcontainer/library-scripts/
+  # SCRIPT_LIST: "common-debian.sh docker-in-docker-debian.sh git-from-src-debian.sh github-debian.sh github-enable-push.sh go-debian.sh nfs-start.sh sshd-debian.sh"
+  # SCRIPT_LIST: "docker-in-docker-debian.sh common-debian.sh"
+  SCRIPT_LIST: ""
+  #GIT_AUTHOR_NAME: "GitHub Action"
+  #GIT_AUTHOR_EMAIL: "action@github.com"
+
+jobs:
+  update_scripts:
+    name: update-scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cleanup Workspace
+        if: ${{ always() }}
+        run: |
+          if [[ -d ${GITHUB_WORKSPACE} ]]; then shopt -s dotglob ; sudo rm -rf ${GITHUB_WORKSPACE}/* ; fi
+
+      - name: Get Repo Name
+        id: repo-name
+        run: echo "::set-output name=value::$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')"
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: ${{ steps.repo-name.outputs.value }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: "microsoft/vscode-dev-containers"
+          path: "vscode-dev-containers"
+
+      - name: Copy scripts
+        run: |
+          if [[ -z "$SCRIPT_LIST" ]]; then
+            SCRIPT_LIST="$(ls -1 ${{ steps.repo-name.outputs.value }}/.devcontainer/library-scripts/ | tr '\n' ' ')"
+          fi
+
+          echo "SCRIPT_LIST: $SCRIPT_LIST"
+
+          for SCRIPT in $SCRIPT_LIST; do
+            if [[ -f vscode-dev-containers/script-library/$SCRIPT ]]; then
+              /usr/bin/cp -vf vscode-dev-containers/script-library/$SCRIPT  ${{ steps.repo-name.outputs.value }}/.devcontainer/library-scripts/
+            fi
+          done
+
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          path: ${{ steps.repo-name.outputs.value }}
+          # committer: "{{ env.GIT_AUTHOR_NAME }} {{ env.GIT_AUTHOR_EMAIL }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: update-scripts
+          title: update-scripts
+          branch: update-scripts
+          assignees: r4b2
