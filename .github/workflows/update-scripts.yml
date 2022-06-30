@@ -6,7 +6,7 @@ on:
     - cron: "10 2 * * 1-5"
 
 env:
-  # Maybe read list from .devcontainer/library-scripts/
+  # Maybe read list from library-scripts/
   # SCRIPT_LIST: "common-debian.sh docker-in-docker-debian.sh git-from-src-debian.sh github-debian.sh github-enable-push.sh go-debian.sh nfs-start.sh sshd-debian.sh"
   # SCRIPT_LIST: "docker-in-docker-debian.sh common-debian.sh"
   SCRIPT_LIST: ""
@@ -42,14 +42,14 @@ jobs:
       - name: Copy scripts
         run: |
           if [[ -z "$SCRIPT_LIST" ]]; then
-            SCRIPT_LIST="$(ls -1 ${{ steps.repo-name.outputs.value }}/.devcontainer/library-scripts/ | tr '\n' ' ')"
+            SCRIPT_LIST="$(ls -1 ${{ steps.repo-name.outputs.value }}/library-scripts/ | tr '\n' ' ')"
           fi
 
           echo "SCRIPT_LIST: $SCRIPT_LIST"
 
           for SCRIPT in $SCRIPT_LIST; do
             if [[ -f vscode-dev-containers/script-library/$SCRIPT ]]; then
-              /usr/bin/cp -vf vscode-dev-containers/script-library/$SCRIPT  ${{ steps.repo-name.outputs.value }}/.devcontainer/library-scripts/
+              /usr/bin/cp -vf vscode-dev-containers/script-library/$SCRIPT  ${{ steps.repo-name.outputs.value }}/library-scripts/
             fi
           done
 
