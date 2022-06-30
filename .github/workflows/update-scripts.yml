@@ -63,4 +63,4 @@ jobs:
           commit-message: update-scripts
           title: update-scripts
           branch: update-scripts
-          assignees: r4b2
+          reviewers: r4b2, Xenion1987

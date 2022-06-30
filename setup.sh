@@ -14,7 +14,6 @@ GOSSM_VERSION="latest"
 SHFMT_VERSION="latest"
 TRIVY_VERSION="0.27.1"
 TERRAFORM_VERSION="1.2.2"
-GHCLI_VERSION="latest"
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -151,20 +150,6 @@ function install_terraform {
     # terraform -install-autocomplete # already in bashrc
 }
 
-function install_ghcli {
-    GH_ORG="cli"
-    GH_REPO="cli"
-    if [[ "${GHCLI_VERSION}" = "latest" ]]; then
-        GHCLI_VERSION="$(get_latest_github_release_version)"
-    fi
-    DOWNLOAD_FILENAME="gh_${GHCLI_VERSION}_linux_amd64.deb"
-
-    sudo curl -sL \
-        "https://github.com/${GH_ORG}/${GH_REPO}/releases/download/${GOSSM_VERSION}/${DOWNLOAD_FILENAME}" \
-        -o /tmp/gh_"${GHCLI_VERSION}"_linux_amd64.deb
-    dpkg -i /tmp/gh_"${GHCLI_VERSION}"_linux_amd64.deb
-}
-
 # function install_bashhub {
 #     curl -OL https://raw.githubusercontent.com/yggdrion/bashhub-client/main/install-bashhub.sh && bash install-bashhub.sh non-interactive
 # }
@@ -177,7 +162,6 @@ install_shellcheck
 install_aws_sam
 install_gossm
 install_trivy
-install_ghcli
 install_session_manager
 #install_bashhub
 pip install cfn-lint
