@@ -32,7 +32,7 @@ RUN apt-get update \
     && if [ "${NODE_VERSION}" != "none" ]; then bash /tmp/library-scripts/node-debian.sh "${NVM_DIR}" "${NODE_VERSION}" "${USERNAME}"; fi \
     && apt-get autoremove -y && apt-get clean -y
 
-RUN bash /tmp/library-scripts/github-debian.sh "latest"
+RUN ./tmp/library-scripts/github-debian.sh
 
 ENV GOROOT=/usr/local/go \
     GOPATH=/go
