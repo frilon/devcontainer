@@ -32,8 +32,9 @@ function install_packages {
         jo \
         xz-utils \
         file \
-        gnupg \
+        gnupg2 \
         pwgen \
+        uuid-runtime \
         software-properties-common \
         redis-tools \
         dos2unix \
