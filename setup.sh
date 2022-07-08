@@ -107,9 +107,9 @@ function install_gossm {
     if [[ "${GOSSM_VERSION}" = "latest" ]]; then
         GOSSM_VERSION="$(get_latest_github_release_version)"
     fi
-    DOWNLOAD_FILENAME="gossm_${GOSSM_VERSION}_Linux_x86_64.tar.gz"
+    DOWNLOAD_FILENAME="gossm_${GOSSM_VERSION/v/}_Linux_x86_64.tar.gz"
     curl -sL \
-        "https://github.com/${GH_ORG}/${GH_REPO}/releases/download/v${GOSSM_VERSION}/${DOWNLOAD_FILENAME}" \
+        "https://github.com/${GH_ORG}/${GH_REPO}/releases/download/${GOSSM_VERSION}/${DOWNLOAD_FILENAME}" \
         -o "/tmp/${DOWNLOAD_FILENAME}"
     tar -xf "/tmp/${DOWNLOAD_FILENAME}" -C /tmp/
     sudo mv "/tmp/gossm" "/usr/local/bin/"
