@@ -43,7 +43,6 @@ function install_packages {
         ca-certificates \
         iputils-ping \
         python3-distutils \
-        zsh
 }
 
 function get_latest_github_release_version() {
