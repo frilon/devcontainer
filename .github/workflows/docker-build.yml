@@ -1,6 +1,8 @@
 name: docker-build
 
 on:
+  schedule:
+    - cron: "20 3 * * *"
   workflow_dispatch:
   push:
     branches:
@@ -36,7 +38,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for container
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         id: meta-push
         uses: docker/metadata-action@69f6fc9d46f2f8bf0d5491e4aabe0bb8c6a4678a
         with:
@@ -58,7 +60,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
 
       - name: Build and push latest image
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8
         with:
           context: .
