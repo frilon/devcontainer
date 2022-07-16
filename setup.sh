@@ -42,7 +42,8 @@ function install_packages {
         lsb-release \
         ca-certificates \
         iputils-ping \
-        python3-distutils
+        python3-distutils \
+        m4
 }
 
 function get_latest_github_release_version() {
