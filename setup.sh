@@ -129,9 +129,9 @@ function install_shfmt {
     if [[ "${SHFMT_VERSION}" = "latest" ]]; then
         SHFMT_VERSION="$(get_latest_github_release_version)"
     fi
-    DOWNLOAD_FILENAME="shfmt_v${SHFMT_VERSION}_linux_amd64"
+    DOWNLOAD_FILENAME="shfmt_${SHFMT_VERSION}_linux_amd64"
     sudo curl -sL \
-        "https://github.com/${GH_ORG}/${GH_REPO}/releases/download/v${GOSSM_VERSION}/${DOWNLOAD_FILENAME}" \
+        "https://github.com/${GH_ORG}/${GH_REPO}/releases/download/${SHFMT_VERSION}/${DOWNLOAD_FILENAME}" \
         -o "/usr/local/bin/shfmt"
     sudo chmod +x "/usr/local/bin/shfmt"
 }
