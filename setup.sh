@@ -13,7 +13,7 @@ AWS_SAM_CLI_VERSION="latest"
 GOSSM_VERSION="latest"
 SHFMT_VERSION="latest"
 TRIVY_VERSION="0.27.1"
-TERRAFORM_VERSION="1.2.2"
+TERRAFORM_VERSION="latest"
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -61,8 +61,8 @@ function install_shellcheck {
         "https://github.com/${GH_ORG}/${GH_REPO}/releases/download/${SHELLCHECK_VERSION}/${DOWNLOAD_FILENAME}" \
         -o "/tmp/${DOWNLOAD_FILENAME}"
     tar -xf "/tmp/${DOWNLOAD_FILENAME}" -C "/tmp/"
-    sudo cp "/tmp/shellcheck-${SHELLCHECK_VERSION}/shellcheck" "/usr/local/bin/"
-    sudo chmod +x "/usr/local/bin/shellcheck"
+    cp "/tmp/shellcheck-${SHELLCHECK_VERSION}/shellcheck" "/usr/local/bin/"
+    chmod +x "/usr/local/bin/shellcheck"
 }
 
 function install_aws_cli {
@@ -77,7 +77,7 @@ function install_aws_cli {
         "https://awscli.amazonaws.com/${DOWNLOAD_FILENAME}" \
         -o "/tmp/awscliv2.zip"
     unzip -q "/tmp/awscliv2.zip" -d "/tmp/awscliv2"
-    sudo /tmp/awscliv2/aws/install
+    /tmp/awscliv2/aws/install
 }
 
 function install_aws_sam {
@@ -92,13 +92,13 @@ function install_aws_sam {
         "https://github.com/${GH_ORG}/${GH_REPO}/releases/download/${AWS_SAM_CLI_VERSION}/${DOWNLOAD_FILENAME}" \
         -o "/tmp/${DOWNLOAD_FILENAME}"
     unzip -q "/tmp/${DOWNLOAD_FILENAME}" -d "/tmp/sam-installation"
-    sudo /tmp/sam-installation/install
+    /tmp/sam-installation/install
 }
 
 function install_session_manager {
     curl -sL "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" \
         -o "/tmp/session-manager-plugin.deb"
-    sudo dpkg -i "/tmp/session-manager-plugin.deb"
+    dpkg -i "/tmp/session-manager-plugin.deb"
 }
 
 function install_gossm {
@@ -112,8 +112,8 @@ function install_gossm {
         "https://github.com/${GH_ORG}/${GH_REPO}/releases/download/${GOSSM_VERSION}/${DOWNLOAD_FILENAME}" \
         -o "/tmp/${DOWNLOAD_FILENAME}"
     tar -xf "/tmp/${DOWNLOAD_FILENAME}" -C /tmp/
-    sudo mv "/tmp/gossm" "/usr/local/bin/"
-    sudo chmod +x "/usr/local/bin/gossm"
+    mv "/tmp/gossm" "/usr/local/bin/"
+    chmod +x "/usr/local/bin/gossm"
 }
 
 function install_trivy {
@@ -130,25 +130,24 @@ function install_shfmt {
         SHFMT_VERSION="$(get_latest_github_release_version)"
     fi
     DOWNLOAD_FILENAME="shfmt_v${SHFMT_VERSION}_linux_amd64"
-    sudo curl -sL \
+    curl -sL \
         "https://github.com/${GH_ORG}/${GH_REPO}/releases/download/v${GOSSM_VERSION}/${DOWNLOAD_FILENAME}" \
         -o "/usr/local/bin/shfmt"
-    sudo chmod +x "/usr/local/bin/shfmt"
+    chmod +x "/usr/local/bin/shfmt"
 }
 
 function install_terraform {
     GH_ORG="hashicorp"
     GH_REPO="terraform"
-    if [[ "${TERRAFORM_VERSION}" = "latest" ]]; then
-        TERRAFORM_VERSION="$(get_latest_github_release_version)"
-    fi
-    DOWNLOAD_FILENAME="terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+    TERRAFORM_VERSION="$(get_latest_github_release_version)"
+
+    DOWNLOAD_FILENAME="terraform_${TERRAFORM_VERSION//v/}_linux_amd64.zip"
 
     curl -sL \
-        "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/${DOWNLOAD_FILENAME}" \
+        "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION//v/}/${DOWNLOAD_FILENAME}" \
         -o "/tmp/${DOWNLOAD_FILENAME}"
-    sudo unzip -q "/tmp/${DOWNLOAD_FILENAME}" -d "/usr/local/bin/"
-    sudo chmod +x "/usr/local/bin/terraform"
+    unzip -oq "/tmp/${DOWNLOAD_FILENAME}" -d "/usr/local/bin/"
+    chmod +x "/usr/local/bin/terraform"
     # terraform -install-autocomplete # already in bashrc
 }
 
