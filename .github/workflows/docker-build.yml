@@ -37,7 +37,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for container
+      - name: Extract metadata for container (push, workflow_dispatch, schedule)
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         id: meta-push
         uses: docker/metadata-action@69f6fc9d46f2f8bf0d5491e4aabe0bb8c6a4678a
@@ -45,9 +45,9 @@ jobs:
           images: ghcr.io/${{ github.repository }}
           # https://github.com/docker/metadata-action#latest-tag
           tags: |
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+            type=raw,value=latest,enable=true
 
-      - name: Extract metadata (tags, labels) for container
+      - name: Extract metadata for container (release created)
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         id: meta-release
         uses: docker/metadata-action@69f6fc9d46f2f8bf0d5491e4aabe0bb8c6a4678a
@@ -59,7 +59,7 @@ jobs:
             type=semver,pattern={{major}}
             type=semver,pattern={{major}}.{{minor}}
 
-      - name: Build and push latest image
+      - name: Build and push image latest (push, workflow_dispatch, schedule)
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94
         with:
@@ -70,7 +70,7 @@ jobs:
           tags: ${{ steps.meta-push.outputs.tags }}
           labels: ${{ steps.meta-push.outputs.labels }}
 
-      - name: Build and push release image
+      - name: Build and push image release (release created)
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94
         with:
@@ -81,7 +81,7 @@ jobs:
           tags: ${{ steps.meta-release.outputs.tags }}
           labels: ${{ steps.meta-release.outputs.labels }}
 
-      - name: Build pull request image
+      - name: Build image pull request (no push to ghcr)
         if: ${{ github.event_name == 'pull_request' }}
         uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94
         with:
