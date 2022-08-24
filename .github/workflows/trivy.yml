@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
 
       - name: Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@cb606dfdb0d2b3698ace62192088ef4f5360b24f
+        uses: aquasecurity/trivy-action@d63413b0a4a4482237085319f7f4a1ce99a8f2ac
         with:
           image-ref: "ghcr.io/${{ github.repository }}:latest"
           format: "table"
@@ -34,6 +34,6 @@ jobs:
         if: ${{ needs.trivy.result == 'failure' }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
+        uses: Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
         with:
           args: "{{ EVENT_PAYLOAD.repository.full_name }} - trivy error"
