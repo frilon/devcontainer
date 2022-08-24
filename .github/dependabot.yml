@@ -4,6 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
+    assignees:
       - "r4b2"
       - "Xenion1987"
