@@ -32,7 +32,10 @@ RUN apt-get update \
     && if [ "${NODE_VERSION}" != "none" ]; then bash /tmp/library-scripts/node-debian.sh "${NVM_DIR}" "${NODE_VERSION}" "${USERNAME}"; fi \
     && apt-get autoremove -y && apt-get clean -y
 
-RUN bash /tmp/library-scripts/github-debian.sh "latest"
+#RUN bash /tmp/library-scripts/github-debian.sh "latest"
+
+RUN git clone https://github.com/devcontainers/features /tmp/features
+RUN bash /tmp/features/src/github-cli/install.sh
 
 ENV GOROOT=/usr/local/go \
     GOPATH=/go
