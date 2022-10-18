@@ -135,10 +135,6 @@ function install_shfmt {
     chmod +x "/usr/local/bin/shfmt"
 }
 
-# function install_bashhub {
-#     curl -OL https://raw.githubusercontent.com/yggdrion/bashhub-client/main/install-bashhub.sh && bash install-bashhub.sh non-interactive
-# }
-
 install_packages
 install_shfmt
 install_aws_cli
@@ -147,9 +143,5 @@ install_aws_sam
 install_gossm
 install_trivy
 install_session_manager
-pip install cfn-lint
 
-rm -rf /tmp/*
-apt-get autoremove -y
-apt-get clean -y
-rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
+pip install cfn-lint
