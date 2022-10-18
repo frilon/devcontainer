@@ -47,9 +47,7 @@ RUN bash /tmp/features/src/python/install.sh
 COPY setup.sh /tmp/
 RUN /bin/bash /tmp/setup.sh
 
-RUN rm -rf /tmp/* /var/lib/apt/lists/* \
-apt-get autoremove -y\
-apt-get clean -y
+RUN rm -rf /tmp/* /var/lib/apt/lists/* ; apt-get autoremove -y ; apt-get clean -y
 
 VOLUME [ "/var/lib/docker" ]
 
