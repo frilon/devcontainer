@@ -22,37 +22,30 @@ ARG USERNAME=automatic
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-# see: https://github.com/microsoft/vscode-dev-containers/tree/main/script-library
-
-COPY library-scripts/*.sh /tmp/library-scripts/
-
-RUN apt-get update \
-    && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true" \
-    && /bin/bash /tmp/library-scripts/docker-in-docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "${USERNAME}" "${USE_MOBY}" "${DOCKER_VERSION}" \
-    && if [ "${NODE_VERSION}" != "none" ]; then bash /tmp/library-scripts/node-debian.sh "${NVM_DIR}" "${NODE_VERSION}" "${USERNAME}"; fi \
-    && apt-get autoremove -y && apt-get clean -y
-
-#RUN bash /tmp/library-scripts/github-debian.sh "latest"
+# https://github.com/devcontainers/features
 
 RUN git clone https://github.com/devcontainers/features /tmp/features
+
+ENV NONFREEPACKAGES=true
+ENV UID=1000
+ENV GID=1000
+RUN bash /tmp/features/src/common-utils/install.sh
+
+RUN bash /tmp/features/src/node/install.sh
+
+RUN bash /tmp/features/src/docker-in-docker/install.sh
+
 RUN bash /tmp/features/src/github-cli/install.sh
 
-ENV GOROOT=/usr/local/go \
-    GOPATH=/go
-ENV PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}
-RUN apt-get update && bash /tmp/library-scripts/go-debian.sh "latest" "${GOROOT}" "${GOPATH}" && apt-get clean -y
+RUN bash /tmp/features/src/terraform/install.sh
 
-ARG PYTHON_PATH=/usr/local/python
-ENV PIPX_HOME=/usr/local/py-utils \
-    PIPX_BIN_DIR=/usr/local/py-utils/bin
-ENV PATH=${PYTHON_PATH}/bin:${PATH}:${PIPX_BIN_DIR}
-# COPY library-scripts/python-debian.sh /tmp/library-scripts/
-RUN apt-get update && bash /tmp/library-scripts/python-debian.sh "3.9" "${PYTHON_PATH}" "${PIPX_HOME}"
+RUN bash /tmp/features/src/go/install.sh
+
+ENV OPTIMIZE=true
+RUN bash /tmp/features/src/python/install.sh
 
 COPY setup.sh /tmp/
 RUN /bin/bash /tmp/setup.sh
-
-RUN rm -rf /tmp/*
 
 VOLUME [ "/var/lib/docker" ]
 
