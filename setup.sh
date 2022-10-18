@@ -13,7 +13,6 @@ AWS_SAM_CLI_VERSION="latest"
 GOSSM_VERSION="latest"
 SHFMT_VERSION="latest"
 TRIVY_VERSION="0.27.1"
-TERRAFORM_VERSION="latest"
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -42,7 +41,6 @@ function install_packages {
         lsb-release \
         ca-certificates \
         iputils-ping \
-        python3-distutils \
         m4
 }
 
@@ -136,38 +134,13 @@ function install_shfmt {
     chmod +x "/usr/local/bin/shfmt"
 }
 
-function install_terraform {
-    GH_ORG="hashicorp"
-    GH_REPO="terraform"
-    TERRAFORM_VERSION="$(get_latest_github_release_version)"
-
-    DOWNLOAD_FILENAME="terraform_${TERRAFORM_VERSION//v/}_linux_amd64.zip"
-
-    curl -sL \
-        "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION//v/}/${DOWNLOAD_FILENAME}" \
-        -o "/tmp/${DOWNLOAD_FILENAME}"
-    unzip -oq "/tmp/${DOWNLOAD_FILENAME}" -d "/usr/local/bin/"
-    chmod +x "/usr/local/bin/terraform"
-    # terraform -install-autocomplete # already in bashrc
-}
-
-# function install_bashhub {
-#     curl -OL https://raw.githubusercontent.com/yggdrion/bashhub-client/main/install-bashhub.sh && bash install-bashhub.sh non-interactive
-# }
-
 install_packages
 install_shfmt
-install_terraform
 install_aws_cli
 install_shellcheck
 install_aws_sam
 install_gossm
 install_trivy
 install_session_manager
-#install_bashhub
-pip install cfn-lint
 
-rm -rf /tmp/*
-apt-get autoremove -y
-apt-get clean -y
-rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
+/usr/local/python/current/bin/pip3 install cfn-lint
