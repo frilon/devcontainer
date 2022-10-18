@@ -41,7 +41,6 @@ function install_packages {
         lsb-release \
         ca-certificates \
         iputils-ping \
-        python3-distutils \
         m4
 }
 
@@ -144,4 +143,4 @@ install_gossm
 install_trivy
 install_session_manager
 
-pip install cfn-lint
+#pip install cfn-lint
