@@ -143,4 +143,4 @@ install_gossm
 install_trivy
 install_session_manager
 
-#pip install cfn-lint
+/usr/local/python/current/bin/pip3 install cfn-lint
