@@ -20,6 +20,7 @@ RUN bash /tmp/features/src/terraform/install.sh
 RUN bash /tmp/features/src/go/install.sh
 
 ENV OPTIMIZE=true
+ENV PYTHON_VERSION=3.9
 RUN bash /tmp/features/src/python/install.sh
 
 COPY setup.sh /tmp/
