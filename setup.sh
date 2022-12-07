@@ -42,7 +42,12 @@ function install_packages {
         ca-certificates \
         iputils-ping \
         m4 \
-        python3-pip
+        python3-pip \
+        build-essential \
+        libssl-dev \
+        libffi-dev \
+        python3-dev \
+        cargo
 }
 
 function get_latest_github_release_version() {
