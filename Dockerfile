@@ -7,7 +7,8 @@ RUN git clone https://github.com/devcontainers/features /tmp/features
 ENV NONFREEPACKAGES=true
 ENV UID=1000
 ENV GID=1000
-RUN bash /tmp/features/src/common-utils/install.sh
+ENV USERNAME=vscode
+# RUN bash /tmp/features/src/common-utils/install.sh
 
 RUN bash /tmp/features/src/node/install.sh
 
