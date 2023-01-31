@@ -69,6 +69,7 @@ jobs:
           #platforms: linux/amd64
           tags: ${{ steps.meta-push.outputs.tags }}
           labels: ${{ steps.meta-push.outputs.labels }}
+          provenance: false
 
       - name: Build and push image release (release created)
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
@@ -80,6 +81,7 @@ jobs:
           #platforms: linux/amd64
           tags: ${{ steps.meta-release.outputs.tags }}
           labels: ${{ steps.meta-release.outputs.labels }}
+          provenance: false
 
       - name: Build image pull request (no push to ghcr)
         if: ${{ github.event_name == 'pull_request' }}
@@ -88,3 +90,4 @@ jobs:
           context: .
           push: false
           platforms: linux/amd64
+          provenance: false
