@@ -40,7 +40,7 @@ jobs:
       - name: Extract metadata for container (push, workflow_dispatch, schedule)
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         id: meta-push
-        uses: docker/metadata-action@57396166ad8aefe6098280995947635806a0e6ea
+        uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96
         with:
           images: ghcr.io/${{ github.repository }}
           # https://github.com/docker/metadata-action#latest-tag
@@ -50,7 +50,7 @@ jobs:
       - name: Extract metadata for container (release created)
         if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
         id: meta-release
-        uses: docker/metadata-action@57396166ad8aefe6098280995947635806a0e6ea
+        uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96
         with:
           images: ghcr.io/${{ github.repository }}
           # https://github.com/docker/metadata-action#latest-tag
