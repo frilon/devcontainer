@@ -7,3 +7,7 @@ updates:
     assignees:
       - "r4b2"
       - "Xenion1987"
+    groups:
+      github-actions-update:
+        patterns:
+          - "*"
